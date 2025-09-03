@@ -162,7 +162,7 @@
                 lookbackStart.setMonth(lookbackStart.getMonth() - 3);
                 
                 const response = await fetch(
-                    `https://finnhub.io/api/v1/company-news?symbol=NVDA&from=${lookbackStart.toISOString().split('T')[0]}&to=${endDate.toISOString().split('T')[0]}&token=${FINNHUB_API_KEY}`
+                    `https://finnhub.io/api/v1/company-news?symbol=NVDA&from=${formatDate(lookbackStart)}&to=${formatDate(endDate)}&token=${FINNHUB_API_KEY}`
                 );
                 const news = await response.json();
                 
@@ -177,7 +177,8 @@
 
                 // Group news by date and calculate daily sentiment
                 const dailySentiment = sortedNews.reduce((acc, article) => {
-                    const date = new Date(article.datetime * 1000).toISOString().split('T')[0];
+                    const articleDate = new Date(article.datetime * 1000);
+                    const date = formatDate(articleDate);
                     if (!acc[date]) {
                         acc[date] = { total: 0, count: 0 };
                     }
@@ -270,7 +271,10 @@
                         x: {
                             type: 'time',
                             time: {
-                                unit: 'month'
+                                unit: 'month',
+                                displayFormats: {
+                                    month: 'dd/MM/yyyy'
+                                }
                             }
                         },
                         y: {
