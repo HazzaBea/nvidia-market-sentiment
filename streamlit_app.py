@@ -2,6 +2,8 @@ import streamlit as st
 import requests
 from datetime import datetime
 import time
+import plotly.graph_objects as go
+import pandas as pd
 
 # Config and setup
 st.set_page_config(
